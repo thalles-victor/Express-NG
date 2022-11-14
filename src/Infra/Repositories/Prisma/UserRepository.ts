@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { RegisterUserEntity } from "../../../Aplication/Adapter/User/Methods/Register/core/RegisterUser.Entity ";
 import { UserGlobalRepresentation } from "../../../Aplication/Adapter/User/Methods/User.GlobalRepresentation";
 import { IUserRepositoryContract } from "../../core/IUserRepository.Contract";
@@ -9,8 +9,8 @@ export class UserRepositoryWithPrisma implements IUserRepositoryContract {
     this.prismaClient = new PrismaClient()
   }
 
-  register(userEntity: RegisterUserEntity): Promise<UserGlobalRepresentation> {
-    const newUser = this.prismaClient.user.create({
+  async register(userEntity: RegisterUserEntity): Promise<UserGlobalRepresentation> {
+    const newUser = await this.prismaClient.user.create({
       data: {
         userName: userEntity.userName,
         password: userEntity.password,
@@ -19,4 +19,25 @@ export class UserRepositoryWithPrisma implements IUserRepositoryContract {
 
     return newUser;
   }
+
+  async getByUserName(userName: string): Promise<UserGlobalRepresentation | null> {
+    if (userName[0] === "@") {
+      const user = this.prismaClient.user.findUnique({
+        where: {
+          userName: userName
+        }
+      })
+
+      return user;
+    }
+
+    const user = this.prismaClient.user.findUnique({
+      where: {
+        userName: ("@" + userName)
+      }
+    })
+
+    return user;
+  }
+
 }

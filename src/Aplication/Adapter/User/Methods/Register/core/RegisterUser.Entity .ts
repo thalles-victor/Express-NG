@@ -13,6 +13,7 @@ export class RegisterUserEntity {
     if (!(userName[0] === "@")) {
       this.userName = ("@" + userName);
     }
+    this.userName = userName;
 
     this.password = bcrypt.hashSync(password, HASH_SALT);
   }

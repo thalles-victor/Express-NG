@@ -5,9 +5,7 @@ export class RegisterUserController {
   constructor(private readonly registerUserService: RegisterUserService) {}
 
   async handle(request: Request, response: Response) {
-    const { userName, password } = request.body.user;
-
-    console.log(userName, password)
+    const { user: { userName, password } } = request.body;
 
     const result = await this.registerUserService.execute({
       userName,
@@ -21,8 +19,6 @@ export class RegisterUserController {
       })
     }
 
-    return response.status(201).json({
-      token: result.value,
-    })
+    return response.status(201).json(result.value)
   }
 }

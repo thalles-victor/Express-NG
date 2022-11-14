@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id_pk    String @id @default(uuid())
-  userName String
+  userName String @unique
   password String
   // accountId String
 

@@ -3,4 +3,5 @@ import { UserGlobalRepresentation } from "../../Aplication/Adapter/User/Methods/
 
 export interface IUserRepositoryContract {
   register(userEntity: RegisterUserEntity): Promise<UserGlobalRepresentation>;
+  getByUserName(userName: string): Promise<UserGlobalRepresentation | null>;
 }
