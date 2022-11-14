@@ -1,0 +1,1 @@
+- [] A  senha deve ter no mínimo um número e uma letra maiúscula (pesquisar de como fazer, se tiver como com o class-validator)
