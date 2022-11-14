@@ -1,6 +1,6 @@
 import * as bcrypt  from "bcrypt"
 import { RegisterUserDTO } from "./RegisterUser.DTO"
-import { HASH_SALT } from "../../../../../ENV";
+import { HASH_SALT } from "../../../../../Shared/Utils/ENV";
 
 export class RegisterUserEntity {
   userName: string

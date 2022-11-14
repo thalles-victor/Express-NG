@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
 
-import { PORT } from "./ENV"
+import { PORT } from "./Shared/Utils/ENV"
 import { userRouter } from "./Adapter/RestAPI/userRouter";
 
 const app = express();
