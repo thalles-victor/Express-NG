@@ -8,10 +8,10 @@ datasource db {
 }
 
 model User {
-  id_pk     String @id @default(uuid())
-  userName  String
-  password  String
-  accountId String
+  id_pk    String @id @default(uuid())
+  userName String
+  password String
+  // accountId String
 
   @@map("users")
 }

@@ -6,7 +6,9 @@ import { userRouter } from "./Adapter/RestAPI/userRouter";
 
 const app = express();
 
-app.use(userRouter);
+app.use(express.json());
+
+app.use("/user", userRouter);
 
 app.listen(
   PORT,
