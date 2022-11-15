@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { AccountGlobalRepresentation } from "../../../Aplication/Adapter/User/Methods/Account.GlobalRepresentation";
 import { RegisterUserEntity } from "../../../Aplication/Adapter/User/Methods/Register/core/RegisterUser.Entity";
 import { UserGlobalRepresentation } from "../../../Aplication/Adapter/User/Methods/User.GlobalRepresentation";
 import { IUserRepositoryContract } from "../../core/IUserRepository.Contract";
@@ -14,8 +15,15 @@ export class UserRepositoryWithPrisma implements IUserRepositoryContract {
       data: {
         userName: userEntity.userName,
         password: userEntity.password,
+        Account: {
+          create: {
+            balance: 100,
+          }
+        }
       }
-    })
+    });
+
+    
 
     return newUser;
   }
@@ -39,5 +47,23 @@ export class UserRepositoryWithPrisma implements IUserRepositoryContract {
 
     return user;
   }
+
+  async getBalanceByUserID(userId: string): Promise<number | null> {
+    const account = await this.prismaClient.account.findUnique({
+      where: {
+        user_fk: userId
+      }
+    });
+
+    if (!account) {
+      return null;
+    }
+
+    const balance = account.balance;
+
+    return balance;
+  }
+
+
 
 }

@@ -19,7 +19,7 @@ model User {
 
 model Account {
   id_pk   String @id @default(uuid())
-  balance Int    @default(1000)
+  balance Int    @default(100)
 
   user         User           @relation(fields: [user_fk], references: [id_pk])
   user_fk      String         @unique

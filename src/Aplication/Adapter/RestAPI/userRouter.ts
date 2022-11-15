@@ -1,4 +1,6 @@
 import { Router, Request, Response } from "express";
+import { Auth } from "../../Shared/Middleware/Auth";
+import { getBalanceController } from "../User/Methods/GetBalance/GetBalance.Factory";
 import { loginUserController } from "../User/Methods/Login/LoginUser.Factory";
 import { registerUserController } from "../User/Methods/Register/RegisterUser.Factory";
 
@@ -10,6 +12,10 @@ userRouter.post("/", async (request: Request, response: Response) => {
 
 userRouter.post("/login", async (request: Request, response: Response) => {
   return loginUserController.handle(request, response);
+})
+
+userRouter.get("/balance", Auth, async (request: Request, response: Response) => {
+  return getBalanceController.handle(request, response);
 })
 
 export { userRouter };
