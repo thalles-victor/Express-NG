@@ -1,5 +1,4 @@
 import { Router, Request, Response } from "express";
-import { buildCheckFunction } from "express-validator";
 import { loginUserController } from "../User/Methods/Login/LoginUser.Factory";
 import { registerUserController } from "../User/Methods/Register/RegisterUser.Factory";
 
