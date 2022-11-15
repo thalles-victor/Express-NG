@@ -25,7 +25,7 @@ model Account {
   user_fk      String         @unique
   transactions Transactions[]
 
-  @@map("account")
+  @@map("accounts")
 }
 
 model Transactions {
@@ -37,5 +37,5 @@ model Transactions {
   Account           Account? @relation(fields: [accountId_pk], references: [id_pk])
   accountId_pk      String?
 
-  @@map("transactionst")
+  @@map("transactions")
 }
