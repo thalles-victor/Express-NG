@@ -12,8 +12,9 @@ export class RegisterUserEntity {
   } : RegisterUserDTO) {
     if (!(userName[0] === "@")) {
       this.userName = ("@" + userName);
+    } else {
+      this.userName = userName;
     }
-    this.userName = userName;
 
     this.password = bcrypt.hashSync(password, HASH_SALT);
   }

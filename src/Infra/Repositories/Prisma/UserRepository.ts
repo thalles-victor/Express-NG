@@ -1,5 +1,5 @@
 import { PrismaClient, User } from "@prisma/client";
-import { RegisterUserEntity } from "../../../Aplication/Adapter/User/Methods/Register/core/RegisterUser.Entity ";
+import { RegisterUserEntity } from "../../../Aplication/Adapter/User/Methods/Register/core/RegisterUser.Entity";
 import { UserGlobalRepresentation } from "../../../Aplication/Adapter/User/Methods/User.GlobalRepresentation";
 import { IUserRepositoryContract } from "../../core/IUserRepository.Contract";
 
@@ -22,7 +22,7 @@ export class UserRepositoryWithPrisma implements IUserRepositoryContract {
 
   async getByUserName(userName: string): Promise<UserGlobalRepresentation | null> {
     if (userName[0] === "@") {
-      const user = this.prismaClient.user.findUnique({
+      const user = await this.prismaClient.user.findUnique({
         where: {
           userName: userName
         }
@@ -31,9 +31,9 @@ export class UserRepositoryWithPrisma implements IUserRepositoryContract {
       return user;
     }
 
-    const user = this.prismaClient.user.findUnique({
+    const user = await this.prismaClient.user.findUnique({
       where: {
-        userName: ("@" + userName)
+        userName: "@" + userName
       }
     })
 

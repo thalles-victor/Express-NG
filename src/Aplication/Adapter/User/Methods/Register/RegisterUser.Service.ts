@@ -7,7 +7,7 @@ import { RegisterUserDTO } from "./core/RegisterUser.DTO";
 import { Either, left, right } from "../../../../Shared/Utils/Errors/Either";
 import { CustomErrorResponse } from "../../../../Shared/Utils/Errors/Error";
 import { JWT_SECRET, TIME_EXPIRATION_TOKEN } from "../../../../Shared/Utils/ENV";
-import { RegisterUserEntity } from "./core/RegisterUser.Entity ";
+import { RegisterUserEntity } from "./core/RegisterUser.Entity";
 
 
 interface TokenResponse {
