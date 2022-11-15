@@ -11,7 +11,8 @@ model User {
   id_pk    String @id @default(uuid())
   userName String @unique
   password String
-  // accountId String
+
+  Account Account?
 
   @@map("users")
 }
@@ -19,11 +20,22 @@ model User {
 model Account {
   id_pk   String @id @default(uuid())
   balance Int    @default(1000)
+
+  user         User           @relation(fields: [user_fk], references: [id_pk])
+  user_fk      String         @unique
+  transactions Transactions[]
+
+  @@map("account")
 }
 
 model Transactions {
-  id_pk             String   @id @default(uuid())
-  createdAt         DateTime @default(now())
+  id_pk     String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
   debitedAccountId  String
   creditedAccountId String
+  Account           Account? @relation(fields: [accountId_pk], references: [id_pk])
+  accountId_pk      String?
+
+  @@map("transactionst")
 }
