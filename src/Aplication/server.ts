@@ -10,6 +10,10 @@ app.use(express.json());
 
 app.use("/user", userRouter);
 
+app.get("/", (request, response) => {
+  return response.send("jhon");
+})
+
 app.listen(
   PORT,
   () => {

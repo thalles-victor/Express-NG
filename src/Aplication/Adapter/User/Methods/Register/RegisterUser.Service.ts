@@ -19,10 +19,12 @@ type Response = Either<CustomErrorResponse, TokenResponse>;
 export class RegisterUserService {
   constructor(private readonly userRepository: IUserRepositoryContract) {}
 
-  async execute({ userName, password }: RegisterUserDTO): Promise<Response> {
+  async execute({ name, userName, password, avatar }: RegisterUserDTO): Promise<Response> {
     const userIsValid = Object.assign(new RegisterUserDTO, {
+      name,
       userName,
-      password
+      password,
+      avatar
     });
 
     /* Verify paramiter is correct */

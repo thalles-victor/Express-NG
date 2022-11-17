@@ -15,8 +15,10 @@ export class UserRepositoryWithPrisma implements IUserRepositoryContract {
   async register(userEntity: RegisterUserEntity): Promise<UserGlobalRepresentation> {
     const newUser = await this.prismaClient.user.create({
       data: {
+        name: userEntity.name,
         userName: userEntity.userName,
         password: userEntity.password,
+        avatar: userEntity.avatar,
         Account: {
           create: {
             balance: 100,
@@ -24,8 +26,7 @@ export class UserRepositoryWithPrisma implements IUserRepositoryContract {
         }
       }
     });
-
-    
+  
 
     return newUser;
   }
@@ -128,6 +129,10 @@ export class UserRepositoryWithPrisma implements IUserRepositoryContract {
     })
 
     return transaction;
+  }
+
+  async getTransaction(userName: string, query?: string | undefined): Promise<TransactionsGlobalRepresentation[]> {
+    throw new Error("Method not implemented")
   }
 
 

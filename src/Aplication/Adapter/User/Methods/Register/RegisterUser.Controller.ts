@@ -5,11 +5,13 @@ export class RegisterUserController {
   constructor(private readonly registerUserService: RegisterUserService) {}
 
   async handle(request: Request, response: Response) {
-    const { user: { userName, password } } = request.body;
+    const { user: { name ,userName, password, avatar } } = request.body;
 
     const result = await this.registerUserService.execute({
+      name,
       userName,
-      password
+      password,
+      avatar
     });
 
     if (result.isLeft()) {

@@ -9,4 +9,5 @@ export interface IUserRepositoryContract {
   getByUserName(userName: string): Promise<UserGlobalRepresentation | null>;
   getBalance(userName: string): Promise<number | null>;
   sendTransaction(transactionEntity: SendTransactionEntiy): Promise<TransactionsGlobalRepresentation | null>;
+  getTransaction(userName: string, query?: string): Promise<TransactionsGlobalRepresentation[]>
 }

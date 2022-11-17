@@ -9,8 +9,10 @@ datasource db {
 
 model User {
   id_pk    String @id @default(uuid())
+  name     String
   userName String @unique
   password String
+  avatar   String
 
   Account Account?
 
