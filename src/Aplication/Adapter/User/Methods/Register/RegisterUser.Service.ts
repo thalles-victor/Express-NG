@@ -8,16 +8,22 @@ import { Either, left, right } from "../../../../Shared/Utils/Errors/Either";
 import { CustomErrorResponse } from "../../../../Shared/Utils/Errors/Error";
 import { JWT_SECRET, TIME_EXPIRATION_TOKEN } from "../../../../Shared/Utils/ENV";
 import { RegisterUserEntity } from "./core/RegisterUser.Entity";
+import { UserGlobalRepresentation } from "../User.GlobalRepresentation";
+import { IMessagingContract } from "../../../../../Infra/Messaging/Kafka/core/IMessagingContract";
 
 
-interface TokenResponse {
-  token: string
+interface RegisterResponse {
+  token: string;
+  user: Partial<UserGlobalRepresentation>;
 }
 
-type Response = Either<CustomErrorResponse, TokenResponse>;
+type Response = Either<CustomErrorResponse, RegisterResponse>;
 
 export class RegisterUserService {
-  constructor(private readonly userRepository: IUserRepositoryContract) {}
+  constructor(
+    private readonly userRepository: IUserRepositoryContract,
+    // private readonly kafkaMessaging: IMessagingContract
+  ) {}
 
   async execute({ name, userName, password, avatar }: RegisterUserDTO): Promise<Response> {
     const userIsValid = Object.assign(new RegisterUserDTO, {
@@ -54,6 +60,12 @@ export class RegisterUserService {
 
     const newUser = await this.userRepository.register(userEntity);
 
+
+    // await this.kafkaMessaging.sendMessage({
+    //   topic: "newUsers",
+    //   message: newUser.userName
+    // })
+
     /*----------------------------*/
 
 
@@ -75,7 +87,12 @@ export class RegisterUserService {
 
 
     return right({
-      token: token
+      token: token,
+      user: {
+        name: newUser.name,
+        userName: newUser.userName,
+        avatar: newUser.avatar
+      }
     })
 
   }

@@ -8,12 +8,14 @@ import { LoginUserDTO } from "./core/LoginUser.DTO";
 import { CustomErrorResponse } from "../../../../Shared/Utils/Errors/Error";
 import { Either, left, right } from "../../../../Shared/Utils/Errors/Either";
 import { JWT_SECRET, TIME_EXPIRATION_TOKEN } from "../../../../Shared/Utils/ENV";
+import { UserGlobalRepresentation } from "../User.GlobalRepresentation";
 
-interface TokenResponse {
-  token: string
+interface LoginResponse {
+  token: string;
+  user: Partial<UserGlobalRepresentation>
 }
 
-type Response = Either<CustomErrorResponse, TokenResponse>;
+type Response = Either<CustomErrorResponse, LoginResponse>;
 
 export class LoginUserService {
   constructor(private readonly userRepository: IUserRepositoryContract) {}
@@ -57,7 +59,12 @@ export class LoginUserService {
     )
 
     return right({
-      token: token
+      token: token,
+      user: {
+        name: user.name,
+        userName: user.userName,
+        avatar: user.avatar,
+      }
     })
 
   }

@@ -1,14 +1,12 @@
 import { IUserRepositoryContract } from "../../../../../Infra/core/IUserRepository.Contract";
+
 import { Either, left, right } from "../../../../Shared/Utils/Errors/Either";
 import { CustomErrorResponse } from "../../../../Shared/Utils/Errors/Error";
+import { UserGlobalRepresentation } from "../User.GlobalRepresentation";
 
-interface IResponseProps {
-  balance: number;
-}
+type Response = Either<CustomErrorResponse, Partial<UserGlobalRepresentation>>
 
-type Response = Either<CustomErrorResponse, IResponseProps>;
-
-export class GetBalanceSerivce {
+export class GetUserInformationPublicService {
   constructor(private readonly userRepository: IUserRepositoryContract) {}
 
   async execute(userName: string): Promise<Response> {
@@ -18,14 +16,10 @@ export class GetBalanceSerivce {
       return left(new CustomErrorResponse("User not found", 400))
     }
 
-    const balance = await this.userRepository.getBalance(user.userName);
-
-    if (balance === null) { //Balance pode ser 0 e entrar nesse bloco
-      return left(new CustomErrorResponse("Balance not found", 400));
-    }
-
     return right({
-      balance: balance
+      name: user.name,
+      userName: user.userName,
+      avatar: user.avatar
     })
   }
 }

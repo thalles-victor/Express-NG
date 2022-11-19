@@ -4,10 +4,16 @@ import { SendTransactionEntiy } from "../../Aplication/Adapter/User/Methods/Send
 import { TransactionsGlobalRepresentation } from "../../Aplication/Adapter/User/Methods/Transaction.GlobalRepresentation";
 import { UserGlobalRepresentation } from "../../Aplication/Adapter/User/Methods/User.GlobalRepresentation";
 
+export interface Query {
+  date?: "asc" | "desc";
+}
+
 export interface IUserRepositoryContract {
   register(userEntity: RegisterUserEntity): Promise<UserGlobalRepresentation>;
   getByUserName(userName: string): Promise<UserGlobalRepresentation | null>;
   getBalance(userName: string): Promise<number | null>;
   sendTransaction(transactionEntity: SendTransactionEntiy): Promise<TransactionsGlobalRepresentation | null>;
-  getTransaction(userName: string, query?: string): Promise<TransactionsGlobalRepresentation[]>
+  getTransaction(userName: string, query?: Query): Promise<TransactionsGlobalRepresentation[]>
+  getTransactionByTransactionID(id: string): Promise<TransactionsGlobalRepresentation | null>
+  getUserByTransaction(accountId: string, transactionID: string): Promise<UserGlobalRepresentation | null>
 }
