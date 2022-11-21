@@ -28,7 +28,7 @@ userRouter.get("/public/:userName", Auth, async (request: Request, response: Res
   return getUserInfoController.handle(request, response);
 })
 
-userRouter.get("/exist/:userName", async (request: Request, response: Response) => {
+userRouter.get("/exist/:userName",  async (request: Request, response: Response) => {
   return checkIfNameIsValidController.handle(request, response);
 })
 
@@ -36,10 +36,9 @@ userRouter.post("/transaction", Auth, async (request: Request, response: Respons
   return sendTransactionController.handle(request, response);
 })
 
-userRouter.get("/transaction/:userName",  async (request: Request, response: Response) => {
+userRouter.get("/transactions", Auth,  async (request: Request, response: Response) => {
   return getTransactionController.handle(request, response);
 })
-
 
 
 userRouter.get("/transaction/voucher/:transactionID", async (request: Request, response: Response) => {

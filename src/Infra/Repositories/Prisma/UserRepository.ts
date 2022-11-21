@@ -1,10 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import { AccountGlobalRepresentation } from "../../../Aplication/Adapter/User/Methods/Account.GlobalRepresentation";
-import { RegisterUserEntity } from "../../../Aplication/Adapter/User/Methods/Register/core/RegisterUser.Entity";
-import { SendTransactionEntiy } from "../../../Aplication/Adapter/User/Methods/SendTransaction/core/SendTransaction.Entity";
-import { TransactionsGlobalRepresentation } from "../../../Aplication/Adapter/User/Methods/Transaction.GlobalRepresentation";
-import { UserGlobalRepresentation } from "../../../Aplication/Adapter/User/Methods/User.GlobalRepresentation";
-import { IUserRepositoryContract, Query } from "../../core/IUserRepository.Contract";
+import { Query } from "../../../Application/Adapter/User/Methods/GetTransaction/core/GetTransaction.DTO";
+import { RegisterUserEntity } from "../../../Application/Adapter/User/Methods/Register/core/RegisterUser.Entity";
+import { SendTransactionEntiy } from "../../../Application/Adapter/User/Methods/SendTransaction/core/SendTransaction.Entity";
+import { TransactionsGlobalRepresentation } from "../../../Application/Adapter/User/Methods/Transaction.GlobalRepresentation";
+import { UserGlobalRepresentation } from "../../../Application/Adapter/User/Methods/User.GlobalRepresentation";
+import { IUserRepositoryContract } from "../../core/IUserRepository.Contract";
 
 
 
@@ -14,8 +14,6 @@ export class UserRepositoryWithPrisma implements IUserRepositoryContract {
     this.prismaClient = new PrismaClient()
   }
 
-
-  
   async register(userEntity: RegisterUserEntity): Promise<UserGlobalRepresentation> {
     const newUser = await this.prismaClient.user.create({
       data: {
@@ -130,29 +128,6 @@ export class UserRepositoryWithPrisma implements IUserRepositoryContract {
     return transaction;
   }
 
-  async getUserByTransaction(accountId: string, transactionID: string): Promise<UserGlobalRepresentation | null> {
-    const transaction = await this.prismaClient.transactions.findUnique({
-      where: { id_pk: transactionID }
-    });
-
-    if (!transaction) return null;
-
-    const account = await this.prismaClient.account.findUnique({
-      where: {
-        id_pk: transaction.debitedAccountId
-      }
-    })
-
-    if (!account) return null;
-    
-    const user = await this.prismaClient.user.findUnique({
-      where: {
-        id_pk: account.userName_fk
-      }
-    });
-
-    return null;
-  }
 
   async getTransactionByTransactionID(id: string): Promise<TransactionsGlobalRepresentation | null> {
     const transaction = await this.prismaClient.transactions.findUnique({
@@ -165,17 +140,36 @@ export class UserRepositoryWithPrisma implements IUserRepositoryContract {
   }
 
   async getTransaction(userName: string, query?: Query): Promise<TransactionsGlobalRepresentation[]> {
-    if (!query) {
+    if (!query?.date) {
       const transactions = await this.prismaClient.transactions.findMany({
         where: {
           OR: [
             { creditedAccountId: userName },
             { debitedAccountId: userName }
-          ]
+          ],
         },
+        orderBy: {
+          createdAt: "desc"
+        }
       })
-      console.log("1", transactions)
+
+      if (query?.cash === "out") {
+        const outTransactions = transactions.filter((transaction) => {
+          return transaction.debitedAccountId === userName;
+        })
   
+        return outTransactions;
+      }
+  
+      if  (query?.cash === "in") {
+        const inTransactions = transactions.filter((transaction) => {
+          return transaction.creditedAccountId === userName
+        });
+  
+        return inTransactions
+      }
+
+    
       return transactions;
     }
 
@@ -188,15 +182,26 @@ export class UserRepositoryWithPrisma implements IUserRepositoryContract {
       },
       orderBy: {
         createdAt: query.date,
-        
       }
-    })
-    console.log("2", transactions)
+    });
 
+    if (query.cash === "out") {
+      const outTransactions = transactions.filter((transaction) => {
+        return transaction.debitedAccountId === userName;
+      })
+
+      return outTransactions;
+    }
+
+    if  (query.cash === "in") {
+      const inTransactions = transactions.filter((transaction) => {
+        return transaction.creditedAccountId === userName
+      });
+
+      return inTransactions
+    }
+    
     return transactions;
-
   }
-
-
 }
 

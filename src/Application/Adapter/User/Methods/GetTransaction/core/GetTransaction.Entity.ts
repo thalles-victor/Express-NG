@@ -10,9 +10,5 @@ export class GetTransactionEntity {
     } else {
       this.userName = userName;
     }
-
-    if (query) {
-      this.query = query;
-    }
   }
 }

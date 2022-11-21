@@ -31,7 +31,7 @@ export class SendTransactionService {
     const errors = await validate(transactionDTO);
 
     if (errors.length > 0) {
-      return left(new CustomErrorResponse("paramiters mal formated", 400));
+      return left(new CustomErrorResponse("paramiters mal formated: " + errors.toLocaleString(), 400));
     }
 
     const transactionEntity = new SendTransactionEntiy(transactionDTO);
@@ -43,19 +43,13 @@ export class SendTransactionService {
     const balance = await this.userRepository.getBalance(userName);
     if (!balance) return left(new CustomErrorResponse("Balance not enough"))
     if (balance < value) {
-      return left(new CustomErrorResponse("Balance not enough"))
+      return left(new CustomErrorResponse("Balance not enough", 400))
     }
-
-    
 
     const targetUserExist = await this.userRepository.getByUserName(transactionEntity.targetUserName);
     if (!targetUserExist) {
       return left(new CustomErrorResponse("Target not found", 400));
     }
-
-
-
-    
     
     const transaction = await this.userRepository.sendTransaction(transactionEntity);
 

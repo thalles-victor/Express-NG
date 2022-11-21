@@ -1,7 +1,8 @@
-import { IUserRepositoryContract, Query } from "../../../../../Infra/core/IUserRepository.Contract";
+import { IUserRepositoryContract } from "../../../../../Infra/core/IUserRepository.Contract";
 import { Either, left, right } from "../../../../Shared/Utils/Errors/Either";
 import { CustomErrorResponse } from "../../../../Shared/Utils/Errors/Error";
 import { TransactionsGlobalRepresentation } from "../Transaction.GlobalRepresentation";
+import { Query } from "./core/GetTransaction.DTO";
 
 interface ResponseProps { 
   transactions: TransactionsGlobalRepresentation[];

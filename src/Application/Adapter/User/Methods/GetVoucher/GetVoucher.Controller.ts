@@ -7,6 +7,14 @@ export class GetVoucherController {
 
   async handle(request: Request, response: Response) {
     const { transactionID } = request.params;
+
+    if (!transactionID) {
+      return response.status(400).json({
+        statusCode: 400,
+        message: "[transactionID] required in router params"
+      })
+    }
+
     const result = await this.getVoucherService.execute(transactionID);
 
     if (result.isLeft()) {

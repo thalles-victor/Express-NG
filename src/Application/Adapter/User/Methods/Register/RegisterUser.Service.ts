@@ -39,7 +39,7 @@ export class RegisterUserService {
     const errors = await validate(userIsValid);
     
     if (errors.length > 0) {
-      return left(new CustomErrorResponse("paramiter mal formated", 400));
+      return left(new CustomErrorResponse("paramiter mal formated: " + errors.concat().toString(), 400));
     }
 
     /*----------------------------*/

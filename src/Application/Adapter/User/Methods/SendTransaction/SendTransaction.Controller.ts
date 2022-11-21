@@ -9,6 +9,8 @@ export class SendTransactionController {
     const { userName } = (request.body.payload) as IPayLoadProps;
     const { transaction: { targetUserName, value, description } } =  request.body;
 
+    //Validate body params in DTO entity
+
     const result = await this.sendTransactionSerivce.execute({
       targetUserName,
       value,
